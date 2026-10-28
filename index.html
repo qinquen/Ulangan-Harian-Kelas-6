@@ -1,0 +1,660 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LOGIN</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================
+       TAMPILAN DASAR
+    ========================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #ffffff;
+      color: #202124;
+      font-family: Roboto, Arial, sans-serif;
+    }
+
+    /* ==========================================
+       KOTAK LOGIN
+    ========================================== */
+
+    .login-card {
+      width: 430px;
+      min-height: 390px;
+      padding: 42px 48px 38px;
+      background: #ffffff;
+      border: 1px solid #dadce0;
+      border-radius: 10px;
+      box-shadow:
+        0 1px 2px rgba(60, 64, 67, 0.08),
+        0 2px 6px rgba(60, 64, 67, 0.08);
+    }
+
+    .login-title {
+      margin: 0 0 38px;
+      text-align: center;
+      color: #202124;
+      font-family: "Google Sans", Roboto, Arial, sans-serif;
+      font-size: 32px;
+      line-height: 40px;
+      font-weight: 500;
+    }
+
+    /* ==========================================
+       KOLOM INPUT
+    ========================================== */
+
+    .field-group {
+      margin-bottom: 24px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #5f6368;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 46px;
+      padding: 8px 42px 8px 12px;
+      border: 1px solid #1a73e8;
+      border-radius: 5px;
+      outline: none;
+      background: #ffffff;
+      color: #202124;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 15px;
+    }
+
+    .input-field:focus {
+      border: 2px solid #1a73e8;
+      padding-left: 11px;
+    }
+
+    .input-field::placeholder {
+      color: #80868b;
+    }
+
+    /* ==========================================
+       TOMBOL MATA
+    ========================================== */
+
+    .eye-button {
+      position: absolute;
+      top: 50%;
+      right: 7px;
+      width: 32px;
+      height: 32px;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .eye-button:hover {
+      background: #f1f3f4;
+    }
+
+    .eye-button svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: #5f6368;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ==========================================
+       PESAN ERROR
+    ========================================== */
+
+    .error-message {
+      display: none;
+      margin: -8px 0 18px;
+      color: #d93025;
+      font-size: 13px;
+    }
+
+    /* ==========================================
+       TOMBOL NEXT
+    ========================================== */
+
+    .button-area {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 34px;
+    }
+
+    .next-button {
+      min-width: 76px;
+      height: 40px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 4px;
+      background: #1a73e8;
+      color: #ffffff;
+      font-family: "Google Sans", Roboto, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .next-button:hover {
+      background: #1765cc;
+    }
+
+    .next-button:disabled {
+      background: #9aa0a6;
+      cursor: not-allowed;
+    }
+
+    /* ==========================================
+       IFRAME TERSEMBUNYI
+    ========================================== */
+
+    .hidden-frame {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      border: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ==========================================
+       RESPONSIF UNTUK HP
+    ========================================== */
+
+    @media (max-width: 600px) {
+      body {
+        padding: 16px;
+      }
+
+      .login-card {
+        width: 100%;
+        min-height: 390px;
+        padding: 38px 28px 32px;
+      }
+
+      .login-title {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .login-card {
+        padding: 32px 22px 28px;
+      }
+
+      .login-title {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================
+       HALAMAN LOGIN
+  ========================================= -->
+
+  <div class="login-card">
+
+    <h1 id="loginTitle" class="login-title">LOGIN</h1>
+
+    <form
+      id="loginForm"
+      method="POST"
+      target="googleFormFrame"
+    >
+
+      <!-- KOLOM PERTAMA -->
+
+      <div class="field-group">
+        <label
+          id="labelField1"
+          class="field-label"
+          for="field1"
+        ></label>
+
+        <div class="input-wrapper">
+          <input
+            id="field1"
+            class="input-field"
+            type="text"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- KOLOM KEDUA -->
+
+      <div class="field-group">
+        <label
+          id="labelField2"
+          class="field-label"
+          for="field2"
+        ></label>
+
+        <div class="input-wrapper">
+          <input
+            id="field2"
+            class="input-field"
+            type="password"
+            required
+          >
+
+          <button
+            id="toggleField2"
+            class="eye-button"
+            type="button"
+            aria-label="Tampilkan"
+          >
+
+            <!-- MATA TERTUTUP -->
+
+            <svg
+              id="eyeClosed"
+              viewBox="0 0 24 24"
+            >
+              <path d="M3 3l18 18"></path>
+              <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>
+              <path d="M9.9 4.3A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-.4 1.4-1.2 2.7-2.2 3.8"></path>
+              <path d="M6.2 6.2C4.5 7.6 3.3 9.6 2 12c1 4 5 8 10 8 1.8 0 3.5-.5 5-1.4"></path>
+            </svg>
+
+            <!-- MATA TERBUKA -->
+
+            <svg
+              id="eyeOpen"
+              viewBox="0 0 24 24"
+              style="display:none;"
+            >
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+
+          </button>
+        </div>
+      </div>
+
+      <!-- PESAN ERROR -->
+
+      <div
+        id="errorMessage"
+        class="error-message"
+        role="alert"
+      >
+        Data wajib diisi.
+      </div>
+
+      <!-- TOMBOL NEXT -->
+
+      <div class="button-area">
+        <button
+          id="nextButton"
+          class="next-button"
+          type="submit"
+        >
+          NEXT
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- GOOGLE FORM TERSEMBUNYI -->
+
+  <iframe
+    id="googleFormFrame"
+    name="googleFormFrame"
+    class="hidden-frame"
+    title="Pengiriman Google Form"
+    aria-hidden="true"
+    tabindex="-1"
+  ></iframe>
+
+  <script>
+    "use strict";
+
+    /* =====================================================
+       =====================================================
+
+       ⚙️ PENGATURAN UTAMA
+
+       CUKUP EDIT BAGIAN CONFIG INI SAJA
+
+       =====================================================
+       ===================================================== */
+
+    const CONFIG = {
+
+      /* ==========================================
+         1. JUDUL HALAMAN
+      ========================================== */
+
+      JUDUL: "LOGIN",
+
+      /* ==========================================
+         2. LINK GOOGLE FORM LOGIN
+
+         Data Nama dan Absen dikirim ke sini.
+         Gunakan link /viewform.
+      ========================================== */
+
+      LINK_FORM_LOGIN:
+        "https://docs.google.com/forms/d/e/1FAIpQLSdsTebzRcFTOIGr68Z7aMYhDXRLhr_oS7UzBuIWU3cCuK4LXQ/viewform?usp=header",
+
+      /* ==========================================
+         3. KOLOM PERTAMA: NAMA
+      ========================================== */
+
+      FIELD_1: {
+        LABEL: "Nama",
+        PLACEHOLDER: "Masukkan nama siswa",
+        ENTRY_ID: "entry.286951520",
+        TYPE: "text"
+      },
+
+      /* ==========================================
+         4. KOLOM KEDUA: ABSEN
+      ========================================== */
+
+      FIELD_2: {
+        LABEL: "Absen",
+        PLACEHOLDER: "Masukkan nomor absen",
+        ENTRY_ID: "entry.1624010459",
+        TYPE: "password"
+      },
+
+      /* ==========================================
+         5. TULISAN TOMBOL
+      ========================================== */
+
+      TOMBOL: "NEXT",
+
+      /* ==========================================
+         6. LINK GOOGLE FORM SOAL
+
+         Siswa diarahkan ke sini setelah login.
+      ========================================== */
+
+      LINK_SOAL:
+        "https://docs.google.com/forms/d/e/1FAIpQLSfljtKH-3TYxQHhwBE13qvEZtBBfzHW06vsVARH4-XrIkTJ_A/viewform?usp=header",
+
+      /* ==========================================
+         7. WAKTU PINDAH
+
+         2000 = 2 detik
+         3000 = 3 detik
+         5000 = 5 detik
+      ========================================== */
+
+      WAKTU_PINDAH: 2000
+
+    };
+
+    /* =====================================================
+       JANGAN PERLU EDIT BAGIAN DI BAWAH INI
+    ===================================================== */
+
+    /* ==========================================
+       AMBIL ELEMENT HTML
+    ========================================== */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const field1 =
+      document.getElementById("field1");
+
+    const field2 =
+      document.getElementById("field2");
+
+    const labelField1 =
+      document.getElementById("labelField1");
+
+    const labelField2 =
+      document.getElementById("labelField2");
+
+    const loginTitle =
+      document.getElementById("loginTitle");
+
+    const nextButton =
+      document.getElementById("nextButton");
+
+    const errorMessage =
+      document.getElementById("errorMessage");
+
+    const toggleField2 =
+      document.getElementById("toggleField2");
+
+    const eyeClosed =
+      document.getElementById("eyeClosed");
+
+    const eyeOpen =
+      document.getElementById("eyeOpen");
+
+    /* ==========================================
+       UBAH LINK LOGIN MENJADI formResponse
+    ========================================== */
+
+    function buatLinkPengiriman(linkForm) {
+      const url = new URL(linkForm);
+
+      if (url.hostname !== "docs.google.com") {
+        throw new Error("Link Google Form tidak valid.");
+      }
+
+      if (!url.pathname.endsWith("/viewform")) {
+        throw new Error("Link harus berakhiran /viewform.");
+      }
+
+      url.pathname = url.pathname.replace(
+        /\/viewform$/,
+        "/formResponse"
+      );
+
+      url.search = "";
+
+      return url.toString();
+    }
+
+    loginForm.action =
+      buatLinkPengiriman(CONFIG.LINK_FORM_LOGIN);
+
+    /* ==========================================
+       TERAPKAN SEMUA PENGATURAN
+    ========================================== */
+
+    document.title = CONFIG.JUDUL;
+
+    loginTitle.textContent =
+      CONFIG.JUDUL;
+
+    labelField1.textContent =
+      CONFIG.FIELD_1.LABEL;
+
+    labelField2.textContent =
+      CONFIG.FIELD_2.LABEL;
+
+    field1.placeholder =
+      CONFIG.FIELD_1.PLACEHOLDER;
+
+    field2.placeholder =
+      CONFIG.FIELD_2.PLACEHOLDER;
+
+    field1.name =
+      CONFIG.FIELD_1.ENTRY_ID;
+
+    field2.name =
+      CONFIG.FIELD_2.ENTRY_ID;
+
+    field1.type =
+      CONFIG.FIELD_1.TYPE;
+
+    field2.type =
+      CONFIG.FIELD_2.TYPE;
+
+    nextButton.textContent =
+      CONFIG.TOMBOL;
+
+    errorMessage.textContent =
+      CONFIG.FIELD_1.LABEL +
+      " dan " +
+      CONFIG.FIELD_2.LABEL +
+      " wajib diisi.";
+
+    /* ==========================================
+       TOMBOL MATA
+    ========================================== */
+
+    toggleField2.addEventListener(
+      "click",
+      function () {
+
+        if (field2.type === "password") {
+
+          field2.type = "text";
+
+          eyeClosed.style.display = "none";
+          eyeOpen.style.display = "block";
+
+          toggleField2.setAttribute(
+            "aria-label",
+            "Sembunyikan " + CONFIG.FIELD_2.LABEL
+          );
+
+        } else {
+
+          field2.type = "password";
+
+          eyeClosed.style.display = "block";
+          eyeOpen.style.display = "none";
+
+          toggleField2.setAttribute(
+            "aria-label",
+            "Tampilkan " + CONFIG.FIELD_2.LABEL
+          );
+        }
+      }
+    );
+
+    /* ==========================================
+       HILANGKAN ERROR SAAT MENGETIK
+    ========================================== */
+
+    field1.addEventListener("input", function () {
+      errorMessage.style.display = "none";
+    });
+
+    field2.addEventListener("input", function () {
+      errorMessage.style.display = "none";
+    });
+
+    /* ==========================================
+       KIRIM LOGIN DAN PINDAH KE SOAL
+    ========================================== */
+
+    let sedangMengirim = false;
+
+    loginForm.addEventListener(
+      "submit",
+      function (event) {
+
+        const value1 = field1.value.trim();
+        const value2 = field2.value.trim();
+
+        /* VALIDASI */
+
+        if (value1 === "" || value2 === "") {
+
+          event.preventDefault();
+
+          errorMessage.style.display = "block";
+
+          return;
+        }
+
+        /* CEGAH PENGIRIMAN BERULANG */
+
+        if (sedangMengirim) {
+
+          event.preventDefault();
+
+          return;
+        }
+
+        sedangMengirim = true;
+
+        /* TAMPILAN TOMBOL */
+
+        errorMessage.style.display = "none";
+
+        nextButton.disabled = true;
+        nextButton.textContent = "...";
+
+        /* PINDAH KE HALAMAN SOAL */
+
+        setTimeout(function () {
+
+          window.location.href =
+            CONFIG.LINK_SOAL;
+
+        }, CONFIG.WAKTU_PINDAH);
+
+        /*
+          Form tetap dikirim secara normal
+          melalui POST ke iframe tersembunyi.
+
+          Jangan gunakan event.preventDefault()
+          di sini karena akan membatalkan
+          pengiriman ke Google Forms.
+        */
+      }
+    );
+
+  </script>
+
+</body>
+</html>
